@@ -12,7 +12,7 @@ describe('Home', () => {
 
     fireEvent.changeText(inputElement, 'Primeira tarefa');
     fireEvent(inputElement, 'submitEditing');
-    
+
     expect(getByText('Primeira tarefa'));
     expect(getByText('1 tarefa'));
 
@@ -33,7 +33,7 @@ describe('Home', () => {
 
     const buttonElement = getByTestId('button-0');
     const markerElement = getByTestId('marker-0');
-    
+
     const taskElement = getByText('Primeira tarefa');
 
     expect(buttonElement).toHaveStyle({
@@ -68,13 +68,39 @@ describe('Home', () => {
     });
   });
 
+  it('should be able to decrement taskCounter when task is done', async () => {
+    const { getByPlaceholderText, getByText } = render(<Home />);
+    const inputElement = getByPlaceholderText('Adicionar novo todo...');
+
+    expect(getByText('0 tarefas'));
+
+    fireEvent.changeText(inputElement, 'Primeira tarefa');
+    fireEvent(inputElement, 'submitEditing');
+
+    expect(getByText('Primeira tarefa'));
+    expect(getByText('1 tarefa'));
+
+    fireEvent.changeText(inputElement, 'Segunda tarefa');
+    fireEvent(inputElement, 'submitEditing');
+
+    expect(getByText('Primeira tarefa'));
+    expect(getByText('Segunda tarefa'));
+    expect(getByText('2 tarefas'));
+
+    const taskElement = getByText('Primeira tarefa');
+
+    fireEvent.press(taskElement);
+
+    expect(getByText('1 tarefa'));
+  });
+
   it('should be able to remove tasks after the trash icon was pressed', async () => {
     const { getByPlaceholderText, getByText, getByTestId, queryByText } = render(<Home />);
     const inputElement = getByPlaceholderText('Adicionar novo todo...');
 
     fireEvent.changeText(inputElement, 'Primeira tarefa');
     fireEvent(inputElement, 'submitEditing');
-    
+
     fireEvent.changeText(inputElement, 'Segunda tarefa');
     fireEvent(inputElement, 'submitEditing');
 
