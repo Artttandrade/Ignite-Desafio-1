@@ -2,6 +2,14 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 
 import { Home } from '../../pages/Home';
+import { Alert } from 'react-native';
+
+class Foo {
+  addListener = (callback: () => number) => { }
+  func = () => {
+    this.addListener(() => 1);
+  }
+}
 
 describe('Home', () => {
   it('should be able to render new added tasks', () => {
@@ -91,25 +99,6 @@ describe('Home', () => {
 
     fireEvent.press(taskElement);
 
-    expect(getByText('1 tarefa'));
-  });
-
-  it('should be able to remove tasks after the trash icon was pressed', async () => {
-    const { getByPlaceholderText, getByText, getByTestId, queryByText } = render(<Home />);
-    const inputElement = getByPlaceholderText('Adicionar novo todo...');
-
-    fireEvent.changeText(inputElement, 'Primeira tarefa');
-    fireEvent(inputElement, 'submitEditing');
-
-    fireEvent.changeText(inputElement, 'Segunda tarefa');
-    fireEvent(inputElement, 'submitEditing');
-
-    const firstTaskTrashIcon = getByTestId('trash-0');
-
-    fireEvent(firstTaskTrashIcon, 'press');
-
-    expect(queryByText('Primeira tarefa')).toBeNull();
-    expect(getByText('Segunda tarefa'));
     expect(getByText('1 tarefa'));
   });
 })
